@@ -332,7 +332,7 @@
       }
       this.isVisible = true;
       this.element.trigger({
-        type: 'show',
+        type: 'showDatetimePicker',
         date: this.date
       });
     },
@@ -358,7 +358,7 @@
         this.setValue();
       this.isVisible = false;
       this.element.trigger({
-        type: 'hide',
+        type: 'hideDatetimePicker',
         date: this.date
       });
     },
@@ -1815,7 +1815,7 @@
       if ($this.data('datetimepicker')) return;
       e.preventDefault();
       // component click requires us to explicitly show it
-      $this.datetimepicker('show');
+      $this.datetimepicker('showDatetimePicker');
     }
   );
   $(function () {
