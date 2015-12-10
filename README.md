@@ -345,7 +345,7 @@ added HTML elements.
 
     $('#datetimepicker').datetimepicker('remove');
 
-### show
+### showDatetimePicker
 
 Arguments: None
 
@@ -355,7 +355,7 @@ Show the datetimepicker.
 $('#datetimepicker').datetimepicker('show');
 ```
 
-### hide
+### hideDatetimePicker
 
 Arguments: None
 
@@ -482,11 +482,11 @@ $('#datetimepicker').datetimepicker('setHoursDisabled', null);
 
 Datetimepicker class exposes a few events for manipulating the dates.
 
-### show
+### showDatetimePicker
 
 Fired when the date picker is displayed.
 
-### hide
+### hideDatetimePicker
 
 Fired when the date picker is hidden.
 
