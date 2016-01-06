@@ -144,10 +144,17 @@
       this.minView = this.element.data('min-view');
     }
 
-    if(this.disableMinutes && this.minView == 0) {
+    if((this.disableMinutes || this.minView == 0) && options.format.indexOf('h') > 0) {
       this.minView = DPGlobal.convertViewMode(1);
+      console.log('chamger')
     } else {
-      this.minView = DPGlobal.convertViewMode(this.minView);
+      if(options.format.indexOf('h') <= 0) {
+        this.minView = DPGlobal.convertViewMode(2);
+      } else {
+        this.minView = DPGlobal.convertViewMode(this.minView);
+      }
+      
+      console.log('nope')
     }
     
 
