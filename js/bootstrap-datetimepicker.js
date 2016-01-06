@@ -83,6 +83,14 @@
     this.isVisible = false;
     this.isInput = this.element.is('input');
     this.fontAwesome = options.fontAwesome || this.element.data('font-awesome') || false;
+    this.minHour = 0;
+    if ('minHour' in options) {
+      this.minHour = options.minHour;
+    }
+    this.maxHour = 21;
+    if ('maxHour' in options) {
+      this.maxHour = options.maxHour;
+    }
 
     this.bootcssVer = options.bootcssVer || (this.isInput ? (this.element.is('.form-control') ? 3 : 2) : ( this.bootcssVer = this.element.is('.input-group') ? 3 : 2 ));
 
@@ -670,7 +678,7 @@
       html = [];
       var txt = '', meridian = '', meridianOld = '';
       var hoursDisabled = this.hoursDisabled || [];
-      for (var i = 0; i < (this.steps * 24); i++) {
+      for (var i = 0; i <= (this.steps * 24); i++) {
         if (hoursDisabled.indexOf(i) !== -1) continue;
         var actual = UTCDate(year, month, dayMonth, i);
         clsName = '';
@@ -707,8 +715,10 @@
           } else {
             txt += ":" + (i % this.steps) * this.minuteStep;
           }
-
-          html.push('<span class="hour' + clsName + '">' + txt + '</span>');
+          if(Math.floor(i / this.steps) >= this.minHour && Math.floor(i / this.steps) < this.maxHour) {
+              html.push('<span class="hour' + clsName + '">' + txt + '</span>');
+          }
+          
         }
       }
       this.picker.find('.datetimepicker-hours td').html(html.join(''));
