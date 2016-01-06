@@ -83,19 +83,13 @@
     this.isVisible = false;
     this.isInput = this.element.is('input');
     this.fontAwesome = options.fontAwesome || this.element.data('font-awesome') || false;
-    
     this.minHour = 0;
     if ('minHour' in options) {
       this.minHour = options.minHour;
     }
-    this.maxHour = 24;
+    this.maxHour = 21;
     if ('maxHour' in options) {
       this.maxHour = options.maxHour;
-    }
-
-    this.disableMinutes = true;
-    if ('disableMinutes' in options) {
-      this.disableMinutes = options.disableMinutes;
     }
 
     this.bootcssVer = options.bootcssVer || (this.isInput ? (this.element.is('.form-control') ? 3 : 2) : ( this.bootcssVer = this.element.is('.input-group') ? 3 : 2 ));
@@ -684,84 +678,49 @@
       html = [];
       var txt = '', meridian = '', meridianOld = '';
       var hoursDisabled = this.hoursDisabled || [];
-
-      if(this.disableMinutes) {
-        for (var i = 0; i <= (this.steps * 24); i++) {
-          if (hoursDisabled.indexOf(i) !== -1) continue;
-          var actual = UTCDate(year, month, dayMonth, i);
-          clsName = '';
-          // We want the previous hour for the startDate
-          if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
-            clsName += ' disabled';
-          } else if (hours == Math.floor(i / this.steps) && minutes == (i % this.steps) * this.minuteStep) {
-            clsName += ' active';
-          }
-          if (this.showMeridian && dates[this.language].meridiem.length == 2) {
-            meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
-            if (meridian != meridianOld) {
-              if (meridianOld != '') {
-                html.push('</fieldset>');
-              }
-              html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
-            }
-            meridianOld = meridian;
-            txt = (i % 12 ? i % 12 : 12); 
-            html.push('<span class="hour' + clsName + ' hour_' + (i < 12 ? 'am' : 'pm') + '">' + txt + '</span>');
-            if (i == 23) {
-              html.push('</fieldset>');
-            }
-          } else {
-
-            if(Math.floor(i / this.steps) < 10) {
-              txt = "0" + Math.floor(i / this.steps);
-            } else {
-              txt = Math.floor(i / this.steps);
-            }
-
-            if((i % this.steps) * this.minuteStep < 10) {
-              txt += ":0" + (i % this.steps) * this.minuteStep;
-            } else {
-              txt += ":" + (i % this.steps) * this.minuteStep;
-            }
-            if(Math.floor(i / this.steps) >= this.minHour && Math.floor(i / this.steps) < this.maxHour) {
-                html.push('<span class="hour' + clsName + '">' + txt + '</span>');
-            }
-            
-          }
+      for (var i = 0; i <= (this.steps * 24); i++) {
+        if (hoursDisabled.indexOf(i) !== -1) continue;
+        var actual = UTCDate(year, month, dayMonth, i);
+        clsName = '';
+        // We want the previous hour for the startDate
+        if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
+          clsName += ' disabled';
+        } else if (hours == Math.floor(i / this.steps) && minutes == (i % this.steps) * this.minuteStep) {
+          clsName += ' active';
         }
-        this.minView = 1;
-      } else {
-        for (var i = 0; i < 24; i++) {
-          if (hoursDisabled.indexOf(i) !== -1) continue;
-          var actual = UTCDate(year, month, dayMonth, i);
-          clsName = '';
-          // We want the previous hour for the startDate
-          if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
-            clsName += ' disabled';
-          } else if (hours == i) {
-            clsName += ' active';
-          }
-          if (this.showMeridian && dates[this.language].meridiem.length == 2) {
-            meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
-            if (meridian != meridianOld) {
-              if (meridianOld != '') {
-                html.push('</fieldset>');
-              }
-              html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
-            }
-            meridianOld = meridian;
-            txt = (i % 12 ? i % 12 : 12);
-            html.push('<span class="hour' + clsName + ' hour_' + (i < 12 ? 'am' : 'pm') + '">' + txt + '</span>');
-            if (i == 23) {
+        if (this.showMeridian && dates[this.language].meridiem.length == 2) {
+          meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
+          if (meridian != meridianOld) {
+            if (meridianOld != '') {
               html.push('</fieldset>');
             }
-          } else {
-            txt = i + ':00';
-            html.push('<span class="hour' + clsName + '">' + txt + '</span>');
+            html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
           }
+          meridianOld = meridian;
+          txt = (i % 12 ? i % 12 : 12); 
+          html.push('<span class="hour' + clsName + ' hour_' + (i < 12 ? 'am' : 'pm') + '">' + txt + '</span>');
+          if (i == 23) {
+            html.push('</fieldset>');
+          }
+        } else {
+
+          if(Math.floor(i / this.steps) < 10) {
+            txt = "0" + Math.floor(i / this.steps);
+          } else {
+            txt = Math.floor(i / this.steps);
+          }
+
+          if((i % this.steps) * this.minuteStep < 10) {
+            txt += ":0" + (i % this.steps) * this.minuteStep;
+          } else {
+            txt += ":" + (i % this.steps) * this.minuteStep;
+          }
+          if(Math.floor(i / this.steps) >= this.minHour && Math.floor(i / this.steps) < this.maxHour) {
+              html.push('<span class="hour' + clsName + '">' + txt + '</span>');
+          }
+          
         }
       }
-      
       this.picker.find('.datetimepicker-hours td').html(html.join(''));
 
       html = [];
