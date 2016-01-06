@@ -100,6 +100,8 @@
     this.initialDate = options.initialDate || new Date();
     this.zIndex = options.zIndex || this.element.data('z-index') || undefined;
 
+    this.steps = Math.floor(60 / this.minuteStep);
+
     this.icons = {
       leftArrow: this.fontAwesome ? 'fa-arrow-left' : (this.bootcssVer === 3 ? 'glyphicon-arrow-left' : 'icon-arrow-left'),
       rightArrow: this.fontAwesome ? 'fa-arrow-right' : (this.bootcssVer === 3 ? 'glyphicon-arrow-right' : 'icon-arrow-right')
@@ -665,18 +667,17 @@
         prevMonth.setUTCDate(prevMonth.getUTCDate() + 1);
       }
       this.picker.find('.datetimepicker-days tbody').empty().append(html.join(''));
-
       html = [];
       var txt = '', meridian = '', meridianOld = '';
       var hoursDisabled = this.hoursDisabled || [];
-      for (var i = 0; i < 96; i++) {
+      for (var i = 0; i < (this.steps * 24); i++) {
         if (hoursDisabled.indexOf(i) !== -1) continue;
         var actual = UTCDate(year, month, dayMonth, i);
         clsName = '';
         // We want the previous hour for the startDate
         if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
           clsName += ' disabled';
-        } else if (hours == Math.floor(i / 4) && minutes == (i % 4) * 15) {
+        } else if (hours == Math.floor(i / this.steps) && minutes == (i % this.steps) * this.minuteStep) {
           clsName += ' active';
         }
         if (this.showMeridian && dates[this.language].meridiem.length == 2) {
@@ -688,20 +689,25 @@
             html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
           }
           meridianOld = meridian;
-          txt = (i % 12 ? i % 12 : 12);
+          txt = (i % 12 ? i % 12 : 12); 
           html.push('<span class="hour' + clsName + ' hour_' + (i < 12 ? 'am' : 'pm') + '">' + txt + '</span>');
           if (i == 23) {
             html.push('</fieldset>');
           }
         } else {
 
-          txt = Math.floor(i / 4) + ':' + (i % 4) * 15;
-          if(Math.floor(i / 4) < 10) {
-            txt = "0" + txt;
+          if(Math.floor(i / this.steps) < 10) {
+            txt = "0" + Math.floor(i / this.steps);
+          } else {
+            txt = Math.floor(i / this.steps);
           }
-          if((i % 4) == 0) {
-            txt += "0";
+
+          if((i % this.steps) * this.minuteStep < 10) {
+            txt += ":0" + (i % this.steps) * this.minuteStep;
+          } else {
+            txt += ":" + (i % this.steps) * this.minuteStep;
           }
+
           html.push('<span class="hour' + clsName + '">' + txt + '</span>');
         }
       }
