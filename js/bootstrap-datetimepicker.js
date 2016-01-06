@@ -94,7 +94,7 @@
     }
     this.linkField = options.linkField || this.element.data('link-field') || false;
     this.linkFormat = DPGlobal.parseFormat(options.linkFormat || this.element.data('link-format') || DPGlobal.getDefaultFormat(this.formatType, 'link'), this.formatType);
-    this.minuteStep = options.minuteStep || this.element.data('minute-step') || 5;
+    this.minuteStep = options.minuteStep || this.element.data('minute-step') || 15;
     this.pickerPosition = options.pickerPosition || this.element.data('picker-position') || 'bottom-right';
     this.showMeridian = options.showMeridian || this.element.data('show-meridian') || false;
     this.initialDate = options.initialDate || new Date();
@@ -669,14 +669,14 @@
       html = [];
       var txt = '', meridian = '', meridianOld = '';
       var hoursDisabled = this.hoursDisabled || [];
-      for (var i = 0; i < 24; i++) {
+      for (var i = 0; i < 96; i++) {
         if (hoursDisabled.indexOf(i) !== -1) continue;
         var actual = UTCDate(year, month, dayMonth, i);
         clsName = '';
         // We want the previous hour for the startDate
         if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
           clsName += ' disabled';
-        } else if (hours == i) {
+        } else if (hours == Math.floor(i / 4) && minutes == (i % 4) * 15) {
           clsName += ' active';
         }
         if (this.showMeridian && dates[this.language].meridiem.length == 2) {
@@ -694,7 +694,14 @@
             html.push('</fieldset>');
           }
         } else {
-          txt = i + ':00';
+
+          txt = Math.floor(i / 4) + ':' + (i % 4) * 15;
+          if(Math.floor(i / 4) < 10) {
+            txt = "0" + txt;
+          }
+          if((i % 4) == 0) {
+            txt += "0";
+          }
           html.push('<span class="hour' + clsName + '">' + txt + '</span>');
         }
       }
@@ -976,6 +983,7 @@
                 }
               } else if (target.is('.hour')) {
                 hours = parseInt(target.text(), 10) || 0;
+                minutes = parseInt(target.text().substr(target.text().indexOf(':') + 1), 10) || 0
                 if (target.hasClass('hour_am') || target.hasClass('hour_pm')) {
                   if (hours == 12 && target.hasClass('hour_am')) {
                     hours = 0;
