@@ -146,17 +146,14 @@
 
     if((this.disableMinutes || this.minView == 0) && options.format.indexOf('h') > 0) {
       this.minView = DPGlobal.convertViewMode(1);
-      console.log('chamger')
     } else {
       if(options.format.indexOf('h') <= 0) {
         this.minView = DPGlobal.convertViewMode(2);
       } else {
         this.minView = DPGlobal.convertViewMode(this.minView);
       }
-      
-      console.log('nope')
     }
-    
+
 
     this.maxView = DPGlobal.modes.length - 1;
     if ('maxView' in options) {
@@ -717,7 +714,7 @@
               html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
             }
             meridianOld = meridian;
-            txt = (i % 12 ? i % 12 : 12); 
+            txt = (i % 12 ? i % 12 : 12);
             html.push('<span class="hour' + clsName + ' hour_' + (i < 12 ? 'am' : 'pm') + '">' + txt + '</span>');
             if (i == 23) {
               html.push('</fieldset>');
@@ -738,7 +735,7 @@
             if(Math.floor(i / this.steps) >= this.minHour && Math.floor(i / this.steps) < this.maxHour) {
                 html.push('<span class="hour' + clsName + '">' + txt + '</span>');
             }
-            
+
           }
         }
         if(this.minView == 0) {
@@ -777,7 +774,7 @@
           }
         }
       }
-      
+
       this.picker.find('.datetimepicker-hours td').html(html.join(''));
 
       html = [];
@@ -1059,7 +1056,7 @@
                 if(this.disableMinutes) {
                   minutes = parseInt(target.text().substr(target.text().indexOf(':') + 1), 10) || 0
                 }
-                
+
                 if (target.hasClass('hour_am') || target.hasClass('hour_pm')) {
                   if (hours == 12 && target.hasClass('hour_am')) {
                     hours = 0;
