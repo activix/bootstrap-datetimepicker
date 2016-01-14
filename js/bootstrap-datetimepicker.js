@@ -83,11 +83,11 @@
     this.isVisible = false;
     this.isInput = this.element.is('input');
     this.fontAwesome = options.fontAwesome || this.element.data('font-awesome') || false;
-    this.minHour = 0;
+    this.minHour = 7;
     if ('minHour' in options) {
       this.minHour = options.minHour;
     }
-    this.maxHour = 24;
+    this.maxHour = 23;
     if ('maxHour' in options) {
       this.maxHour = options.maxHour;
     }
