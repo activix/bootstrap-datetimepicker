@@ -4,7 +4,7 @@
   "description": "Modifications to bootstrap-datetimepicker for Activix",
   "main": ["js/bootstrap-datetimepicker.js", "css/bootstrap-datetimepicker.css"],
   "authors": [
-    "Philippe Tellier",
+    "Philippe Tellier <philippe@activix.ca>"
   ],
   "ignore": [
     "build",
