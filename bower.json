@@ -1,6 +1,11 @@
 {
   "name": "activix-bootstrap-datetimepicker",
+  "homepage": "https://github.com/activix/bootstrap-datetimepicker",
+  "description": "Modifications to bootstrap-datetimepicker for Activix",
   "main": ["js/bootstrap-datetimepicker.js", "css/bootstrap-datetimepicker.css"],
+  "authors": [
+    "Philippe Tellier",
+  ],
   "ignore": [
     "build",
     "sample in bootstrap v2",
