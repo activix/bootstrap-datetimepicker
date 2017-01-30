@@ -157,6 +157,8 @@ The date format, combination of p, P, h, hh, i, ii, s, ss, d, dd, m, mm, M, MM, 
  * MM : full textual representation of a month, such as January or March
  * yy : two digit representation of a year
  * yyyy : full numeric representation of a year, 4 digits
+ * t : unix epoch timestamp
+ * Z : abbreviated timezone name
 
 ### weekStart
 
@@ -211,6 +213,12 @@ The lowest view that the datetimepicker should show.
 Number, String. Default: 4, 'decade'
 
 The highest view that the datetimepicker should show.
+
+### clearBtn
+
+Boolean. Default: false
+
+If true, displays a "Clear" button at the bottom of the datetimepicker to clear the current selection. Moreover, the datetimepicker will be closed if autoclose is set to true.
 
 ### todayBtn
 
@@ -290,15 +298,94 @@ Number. Default: undefined
 
 zIndex value is being automatically calculated based on the DOM tree, where we seek the highest value. To skip this process you can set the value manually.
 
-### onRender
+### timezone
 
-This event is fired when a day is rendered inside the datepicker. Should return a string. Return 'disabled' to disable the day from being selected.
+String. Default: Clients current timezone abbreviated name
+
+You can allow the viewer to display the date along with the given timezone. Note that this has to be used in conjunction with the `Z` format option. Example below: 
+
 
 ```javascript
-$('#date-end')
+$('#date-end').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii P Z'
+        timezone: 'GMT'
+    });
+```
+
+![](http://s32.postimg.org/55x4fud05/Screen_Shot_2016_05_17_at_5_43_34_PM.png)
+
+
+### onRenderYear
+
+This event is fired when a year is rendered inside the datepicker. Should return an array of classes to add to this element. Return ['disabled'] to disable the day from being selected.
+
+```javascript
+$('#date')
     .datetimepicker({
-        onRender: function(date) {
-            return ev.date.valueOf() < date-start-display.valueOf() ? ' disabled' : '';
+        onRenderYear: function(date) {
+            //Disable picking dates from any year apart from 2015/2016
+            if (date.getFullYear() < 2015 || date.getFullYear() > 2016)
+                return ['disabled']
+        }
+    });
+```
+
+### onRenderMonth
+
+This event is fired when a month is rendered inside the datepicker. Should return an array of classes to add to this element. Return ['disabled'] to disable the day from being selected.
+
+```javascript
+$('#date')
+    .datetimepicker({
+        onRenderMonth: function(date) {
+            //Disable every other month in the year 2016
+            if (date.getUTCMonth() % 2 === 0 && date.getUTCFullYear() === 2016)
+                return ['disabled']
+        }
+    });
+```
+
+### onRenderDay
+
+This event is fired when a day is rendered inside the datepicker. Should return an array of classes to add to this element. Return ['disabled'] to disable the day from being selected.
+
+```javascript
+$('#date')
+    .datetimepicker({
+        onRenderDay: function(date) {
+            //Disable dates 18-24 of every month
+            if (date.getDate() >= 18 && date.getDate() <= 24)
+                return ['disabled'];
+        }
+    });
+```
+
+### onRenderHour
+
+This event is fired when a hour is rendered inside the datepicker. Should return an array of classes to add to this element. Return ['disabled'] to disable the day from being selected.
+
+```javascript
+$('#date')
+    .datetimepicker({
+        onRenderHour: function(hour) {
+            //Disable any time between 12:00 and 13:59
+            if (date.getUTCHours() === 12 || date.getUTCHours() === 13)
+                return ['disabled'];
+        }
+    });
+```
+
+### onRenderMinute
+
+This event is fired when a minute is rendered inside the datepicker. Should return an array of classes to add to this element. Return ['disabled'] to disable the day from being selected.
+
+```javascript
+$('#date')
+    .datetimepicker({
+        onRenderMinute: function(minute) {
+            //Disable all times between 30 past and 20 to every hour for workdays
+            if (date.getDay() !== 0 && date.getDay() !== 6 && date.getUTCMinutes() >= 30 && date.getUTCMinutes() <= 40)
+                return ['disabled'];
         }
     });
 ```
@@ -476,6 +563,24 @@ Omit hoursDisabled (or provide an otherwise falsey value) to unset the disabled 
 ```javascript
 $('#datetimepicker').datetimepicker('setHoursDisabled');
 $('#datetimepicker').datetimepicker('setHoursDisabled', null);
+```
+
+### setInitialDate
+
+Arguments:
+
+* setInitialDate (String)
+
+Sets a new inital date on the datetimepicker.
+
+```javascript
+$('#datetimepicker').datetimepicker('setInitialDate', '2012-12-31');
+```
+
+Get the inital date on the datetimepicker.
+
+```javascript
+$('#datetimepicker').datetimepicker('getInitialDate');
 ```
 
 ## Events
