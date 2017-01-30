@@ -123,7 +123,7 @@
     this.zIndex = options.zIndex || this.element.data('z-index') || undefined;
     this.title = typeof options.title === 'undefined' ? false : options.title;
     this.timezone = options.timezone || timeZoneAbbreviation();
-    
+
     this.steps = Math.floor(60 / this.minuteStep);
 
     this.icons = {
@@ -742,6 +742,7 @@
         month = d.getUTCMonth(),
         dayMonth = d.getUTCDate(),
         hours = d.getUTCHours(),
+        minutes = d.getUTCMinutes(),
         startYear = this.startDate.getUTCFullYear(),
         startMonth = this.startDate.getUTCMonth(),
         endYear = this.endDate.getUTCFullYear(),
@@ -819,16 +820,16 @@
           if (hoursDisabled.indexOf(i) !== -1) {
               classes.push('disabled');
           }
-          
+
           var actual = UTCDate(year, month, dayMonth, i);
-          
+
           // We want the previous hour for the startDate
           if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
             classes.push('disabled');
           } else if (hours == Math.floor(i / this.steps) && minutes == (i % this.steps) * this.minuteStep) {
             classes.push('active');
           }
-          
+
           if (this.showMeridian && dates[this.language].meridiem.length === 2) {
             meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
             if (meridian !== meridianOld) {
@@ -878,7 +879,7 @@
           classes.push('disabled');
         }
         var actual = UTCDate(year, month, dayMonth, i);
-          
+
         // We want the previous hour for the startDate
         if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
           classes.push('disabled');
@@ -1959,7 +1960,7 @@
                 '</tr>' +
       '</thead>',
     contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
-    footTemplate: '<tfoot>' + 
+    footTemplate: '<tfoot>' +
                     '<tr><th colspan="7" class="today"></th></tr>' +
                     '<tr><th colspan="7" class="clear"></th></tr>' +
                   '</tfoot>'
