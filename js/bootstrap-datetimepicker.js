@@ -155,16 +155,14 @@
       this.minView = this.element.data('min-view');
     }
 
-    if((this.disableMinutes || this.minView == 0) && options.format.indexOf('h') > 0) {
-      this.minView = DPGlobal.convertViewMode(1);
-    } else {
-      if(options.format.indexOf('h') <= 0) {
-        this.minView = DPGlobal.convertViewMode(2);
-      } else {
     this.minView = DPGlobal.convertViewMode(this.minView);
+    if ('format' in options) {
+      if ((this.disableMinutes || this.minView == 0) && options.format.indexOf('h') !== -1) {
+          this.minView = DPGlobal.convertViewMode(1);
+      } else if (options.format.indexOf('h') === -1) {
+          this.minView = DPGlobal.convertViewMode(2);
       }
     }
-
 
     this.maxView = DPGlobal.modes.length - 1;
     if ('maxView' in options) {
