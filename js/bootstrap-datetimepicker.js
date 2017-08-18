@@ -819,7 +819,7 @@
               classes.push('disabled');
           }
 
-          var actual = UTCDate(year, month, dayMonth, i);
+          var actual = UTCDate(year, month, dayMonth, Math.floor(i / this.steps));
 
           // We want the previous hour for the startDate
           if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
