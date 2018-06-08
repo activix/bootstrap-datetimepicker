@@ -118,7 +118,7 @@
     this.linkFormat = DPGlobal.parseFormat(options.linkFormat || this.element.data('link-format') || DPGlobal.getDefaultFormat(this.formatType, 'link'), this.formatType);
     this.minuteStep = options.minuteStep || this.element.data('minute-step') || 15;
     this.pickerPosition = options.pickerPosition || this.element.data('picker-position') || 'bottom-right';
-    this.showMeridian = options.showMeridian || this.element.data('show-meridian') || false;
+    this.showMeridian = options.showMeridian || this.element.data('show-meridian') || options.format.indexOf(' p') !== -1 || false;
     this.initialDate = options.initialDate || new Date();
     this.zIndex = options.zIndex || this.element.data('z-index') || undefined;
     this.title = typeof options.title === 'undefined' ? false : options.title;
@@ -829,7 +829,9 @@
           }
 
           if (this.showMeridian && dates[this.language].meridiem.length === 2) {
-            meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
+            var tempHour = Math.floor(i / this.steps);
+
+            meridian = (tempHour < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
             if (meridian !== meridianOld) {
               if (meridianOld !== '') {
                 html.push('</fieldset>');
@@ -837,14 +839,26 @@
               html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
             }
             meridianOld = meridian;
-            txt = (i % 12 ? i % 12 : 12);
-            if (i < 12) {
+            
+            var txt = (tempHour % 12 ? tempHour % 12 : 12);
+
+            if((i % this.steps) * this.minuteStep < 10) {
+              txt += ":0" + (i % this.steps) * this.minuteStep;
+            } else {
+              txt += ":" + (i % this.steps) * this.minuteStep;
+            }
+
+            if (i < (this.steps * 12)) {
               classes.push('hour_am');
             } else {
               classes.push('hour_pm');
             }
-            html.push('<span class="' + classes.join(' ') + '">' + txt + '</span>');
-            if (i === 23) {
+
+            if(i != (24 * this.steps)) {
+              html.push('<span class="' + classes.join(' ') + '">' + txt + '</span>');
+            }
+
+            if (Math.floor(i / this.steps) === 23 && (i % this.steps) * this.minuteStep == this.steps * this.minuteStep) {
               html.push('</fieldset>');
             }
           } else {
