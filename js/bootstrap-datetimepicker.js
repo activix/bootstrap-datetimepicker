@@ -813,13 +813,13 @@
 
       if(this.disableMinutes) {
         for (var i = 0; i <= (this.steps * 24); i++) {
-          d.setUTCHours(i);
+          d.setUTCHours(Math.floor(i / this.steps));
           classes = this.onRenderHour(d);
           if (hoursDisabled.indexOf(i) !== -1) {
               classes.push('disabled');
           }
 
-          var actual = UTCDate(year, month, dayMonth, Math.floor(i / this.steps));
+          var actual = UTCDate(year, month, dayMonth, Math.floor(i / this.steps), (i % this.steps) * this.minuteStep);
 
           // We want the previous hour for the startDate
           if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
@@ -884,45 +884,45 @@
           target = 'hours';
         }
       } else {
-      for (var i = 0; i < 24; i++) {
-        d.setUTCHours(i);
-        classes = this.onRenderHour(d);
-        if (hoursDisabled.indexOf(i) !== -1) {
-          classes.push('disabled');
-        }
-        var actual = UTCDate(year, month, dayMonth, i);
+        for (var i = 0; i < 24; i++) {
+          d.setUTCHours(i);
+          classes = this.onRenderHour(d);
+          if (hoursDisabled.indexOf(i) !== -1) {
+            classes.push('disabled');
+          }
+          var actual = UTCDate(year, month, dayMonth, i);
 
-        // We want the previous hour for the startDate
-        if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
-          classes.push('disabled');
-        } else if (hours === i) {
-          classes.push('active');
-        }
-        if (this.showMeridian && dates[this.language].meridiem.length === 2) {
-          meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
-          if (meridian !== meridianOld) {
-            if (meridianOld !== '') {
+          // We want the previous hour for the startDate
+          if ((actual.valueOf() + 3600000) <= this.startDate || actual.valueOf() > this.endDate) {
+            classes.push('disabled');
+          } else if (hours === i) {
+            classes.push('active');
+          }
+          if (this.showMeridian && dates[this.language].meridiem.length === 2) {
+            meridian = (i < 12 ? dates[this.language].meridiem[0] : dates[this.language].meridiem[1]);
+            if (meridian !== meridianOld) {
+              if (meridianOld !== '') {
+                html.push('</fieldset>');
+              }
+              html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
+            }
+            meridianOld = meridian;
+            txt = (i % 12 ? i % 12 : 12);
+            if (i < 12) {
+              classes.push('hour_am');
+            } else {
+              classes.push('hour_pm');
+            }
+            html.push('<span class="' + classes.join(' ') + '">' + txt + '</span>');
+            if (i === 23) {
               html.push('</fieldset>');
             }
-            html.push('<fieldset class="hour"><legend>' + meridian.toUpperCase() + '</legend>');
-          }
-          meridianOld = meridian;
-          txt = (i % 12 ? i % 12 : 12);
-          if (i < 12) {
-            classes.push('hour_am');
           } else {
-            classes.push('hour_pm');
+            txt = i + ':00';
+                if(i >= this.minHour && i < this.maxHour) {
+              html.push('<span class="' + classes.join(' ') + '">' + txt + '</span>');
+            }
           }
-          html.push('<span class="' + classes.join(' ') + '">' + txt + '</span>');
-          if (i === 23) {
-            html.push('</fieldset>');
-          }
-        } else {
-          txt = i + ':00';
-            if(i >= this.minHour && i < this.maxHour) {
-          html.push('<span class="' + classes.join(' ') + '">' + txt + '</span>');
-        }
-      }
         }
       }
 
