@@ -523,7 +523,7 @@
     },
 
     setValue: function () {
-      var formatted = this.getFormattedDate();
+      var formatted = this.getFormattedDate(this.format);
       if (!this.isInput) {
         if (this.component) {
           this.element.find('input').val(formatted);
@@ -1843,6 +1843,7 @@
       }
       var val;
       if (type === 'standard') {
+        let meridiem = (dates[language].meridiem.length === 2 ? dates[language].meridiem[date.getUTCHours() < 12 ? 0 : 1] : '');
         val = {
           t:    date.getTime(),
           // year
@@ -1856,9 +1857,9 @@
           d:    date.getUTCDate(),
           D:    dates[language].daysShort[date.getUTCDay()],
           DD:   dates[language].days[date.getUTCDay()],
-          p:    (dates[language].meridiem.length === 2 ? dates[language].meridiem[date.getUTCHours() < 12 ? 0 : 1] : ''),
+          p:    meridiem,
           // hour
-          h:    date.getUTCHours(),
+          h:    meridiem ? (date.getUTCHours() % 12 === 0 ? 12 : date.getUTCHours() % 12) : date.getUTCHours(),
           // minute
           i:    date.getUTCMinutes(),
           // second
