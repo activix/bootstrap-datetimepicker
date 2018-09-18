@@ -354,6 +354,8 @@
     if (this.isInline) {
       this.show();
     }
+
+    globalVar = this;
   };
 
   Datetimepicker.prototype = {
@@ -1859,7 +1861,7 @@
           DD:   dates[language].days[date.getUTCDay()],
           p:    meridiem,
           // hour
-          h:    meridiem ? (date.getUTCHours() % 12 === 0 ? 12 : date.getUTCHours() % 12) : date.getUTCHours(),
+          h:    globalVar.showMeridian ? (date.getUTCHours() % 12 === 0 ? 12 : date.getUTCHours() % 12) : date.getUTCHours(),
           // minute
           i:    date.getUTCMinutes(),
           // second
