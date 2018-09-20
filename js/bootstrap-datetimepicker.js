@@ -1845,7 +1845,7 @@
       }
       var val;
       if (type === 'standard') {
-        let meridiem = (dates[language].meridiem.length === 2 ? dates[language].meridiem[date.getUTCHours() < 12 ? 0 : 1] : '');
+        var meridiem = (dates[language].meridiem.length === 2 ? dates[language].meridiem[date.getUTCHours() < 12 ? 0 : 1] : '');
         val = {
           t:    date.getTime(),
           // year
