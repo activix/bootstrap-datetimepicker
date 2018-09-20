@@ -157,9 +157,9 @@
 
     this.minView = DPGlobal.convertViewMode(this.minView);
     if ('format' in options) {
-      if ((this.disableMinutes || this.minView == 0) && options.format.indexOf('h') !== -1) {
+      if ((this.disableMinutes || this.minView == 0) && (options.format.indexOf('h') !== -1 || options.format.indexOf('H') !== -1)) {
           this.minView = DPGlobal.convertViewMode(1);
-      } else if (options.format.indexOf('h') === -1) {
+      } else if (options.format.indexOf('h') === -1 && options.format.indexOf('H') === -1) {
           this.minView = DPGlobal.convertViewMode(2);
       }
     }
@@ -1861,7 +1861,7 @@
           DD:   dates[language].days[date.getUTCDay()],
           p:    meridiem,
           // hour
-          h:    globalVar.showMeridian ? (date.getUTCHours() % 12 === 0 ? 12 : date.getUTCHours() % 12) : date.getUTCHours(),
+          h:    date.getUTCHours(),
           // minute
           i:    date.getUTCMinutes(),
           // second
