@@ -1,7 +1,7 @@
 {
   "name": "@activix/bootstrap-datetimepicker",
   "description": "Both Date and Time picker widget based on twitter bootstrap",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "license": "Apache 2.0",
   "author": {
     "name": "Sebastien Malot"

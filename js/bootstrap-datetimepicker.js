@@ -354,8 +354,6 @@
     if (this.isInline) {
       this.show();
     }
-
-    globalVar = this;
   };
 
   Datetimepicker.prototype = {
